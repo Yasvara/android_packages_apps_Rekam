@@ -1,0 +1,9 @@
+# Local test loop only (`cargo test`); the platform builds this crate with Android.bp.
+[package]
+name = "rekam_engine"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+rekam_media = { path = "../media" }

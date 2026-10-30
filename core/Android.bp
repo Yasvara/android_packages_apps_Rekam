@@ -1,0 +1,21 @@
+// Rekam's control-plane logic with no Android dependencies: settings and their resolution
+// against codec caps, audio clocks, pause, meter ballistics and page reader, source planning.
+java_library {
+    name: "rekam-core",
+    srcs: ["src/**/*.kt"],
+    host_supported: true,
+    sdk_version: "core_current",
+}
+
+java_test_host {
+    name: "rekam_core_tests",
+    srcs: ["tests/**/*.kt"],
+    static_libs: [
+        "rekam-core",
+        "junit",
+    ],
+    test_options: {
+        unit_test: true,
+    },
+    test_suites: ["general-tests"],
+}

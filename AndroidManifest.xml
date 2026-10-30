@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The Yasvara Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.yasvara.rekam">
+
+    <!-- Clients (Pentas, Laras) control the engine through IRekam. -->
+    <permission
+        android:name="org.yasvara.rekam.permission.CONTROL"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="org.yasvara.rekam.permission.CONTROL" />
+
+    <uses-permission android:name="android.permission.MANAGE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_ROUTING" />
+    <uses-permission android:name="android.permission.REAL_GET_TASKS" />
+    <!-- Strips and the app picker name any app that plays or runs. -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.MANAGE_ACTIVITY_TASKS" />
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
+    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_rekam"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+
+        <service
+            android:name=".engine.RekamService"
+            android:process=":engine"
+            android:exported="true"
+            android:permission="org.yasvara.rekam.permission.CONTROL"
+            android:foregroundServiceType="mediaProjection|microphone">
+            <intent-filter>
+                <action android:name="org.yasvara.rekam.BIND" />
+                <action android:name="org.yasvara.rekam.START" />
+                <action android:name="org.yasvara.rekam.STOP" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".ui.RekamTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_rekam"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+        </service>
+
+        <activity
+            android:name=".ui.StartSheetActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Rekam.Sheet">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".recovery.BootReceiver"
+            android:process=":engine"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

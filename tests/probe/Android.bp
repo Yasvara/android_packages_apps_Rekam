@@ -1,0 +1,16 @@
+// Device probes for SPEC-0020 M0. Platform-signed so a plain `adb install` gets the
+// signature permissions and hidden APIs; never shipped in the ROM.
+android_test {
+    name: "RekamProbe",
+    srcs: ["src/**/*.kt"],
+    manifest: "AndroidManifest.xml",
+    platform_apis: true,
+    certificate: "platform",
+    static_libs: [
+        "androidx.test.runner",
+        "androidx.test.ext.junit",
+        "truth",
+        "kotlin-stdlib",
+    ],
+    test_suites: ["device-tests"],
+}

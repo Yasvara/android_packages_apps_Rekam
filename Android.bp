@@ -1,0 +1,64 @@
+// Rekam: Yasvara screen recorder.
+
+// The one client API (AIDL + RekamClient): Pentas, Laras and Rekam's own tile use it.
+java_library {
+    name: "rekam-client",
+    srcs: [
+        "client/aidl/**/*.aidl",
+        "client/src/**/*.kt",
+    ],
+    aidl: {
+        local_include_dirs: ["client/aidl"],
+    },
+    static_libs: [
+        "kotlinx-coroutines-core",
+        "rekam-core",
+    ],
+    sdk_version: "system_current",
+}
+
+android_app {
+    name: "Rekam",
+    srcs: ["src/**/*.kt"],
+    resource_dirs: ["res"],
+    manifest: "AndroidManifest.xml",
+    platform_apis: true,
+    privileged: true,
+    system_ext_specific: true,
+    certificate: "platform",
+    static_libs: [
+        "rekam-client",
+        "androidx.activity_activity-compose",
+        "androidx.compose.foundation_foundation",
+        "androidx.compose.material3_material3",
+        "androidx.compose.runtime_runtime",
+        "androidx.compose.ui_ui",
+        "androidx.core_core-ktx",
+        "kotlinx-coroutines-android",
+    ],
+    jni_libs: ["librekam_jni"],
+    use_embedded_native_libs: true,
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
+    required: [
+        "default_permissions_org.yasvara.rekam.xml",
+        "privapp_whitelist_org.yasvara.rekam.xml",
+    ],
+}
+
+prebuilt_etc_xml {
+    name: "privapp_whitelist_org.yasvara.rekam.xml",
+    src: "privapp_whitelist_org.yasvara.rekam.xml",
+    system_ext_specific: true,
+    filename_from_src: true,
+    sub_dir: "permissions",
+}
+
+prebuilt_etc_xml {
+    name: "default_permissions_org.yasvara.rekam.xml",
+    src: "default_permissions_org.yasvara.rekam.xml",
+    system_ext_specific: true,
+    filename_from_src: true,
+    sub_dir: "default-permissions",
+}

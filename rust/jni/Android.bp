@@ -1,0 +1,18 @@
+// JNI face of the Rekam data plane (org.yasvara.rekam.engine.Native).
+rust_ffi_shared {
+    name: "librekam_jni",
+    crate_name: "rekam_jni",
+    edition: "2021",
+    srcs: ["src/lib.rs"],
+    lints: "android",
+    clippy_lints: "android",
+    // One self-contained library inside the APK: std and every crate linked in.
+    prefer_rlib: true,
+    rustlibs: [
+        "libandroid_logger",
+        "libjni",
+        "liblog_rust",
+        "librekam_engine",
+        "librekam_media",
+    ],
+}

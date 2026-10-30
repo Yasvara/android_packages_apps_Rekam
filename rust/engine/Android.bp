@@ -1,0 +1,22 @@
+// Rekam data plane between the encoders and the file. std only.
+rust_defaults {
+    name: "librekam_engine_defaults",
+    crate_name: "rekam_engine",
+    edition: "2021",
+    srcs: ["src/lib.rs"],
+    lints: "android",
+    clippy_lints: "android",
+    host_supported: true,
+    rustlibs: ["librekam_media"],
+}
+
+rust_library {
+    name: "librekam_engine",
+    defaults: ["librekam_engine_defaults"],
+}
+
+rust_test_host {
+    name: "rekam_engine_unit_tests",
+    defaults: ["librekam_engine_defaults"],
+    test_suites: ["general-tests"],
+}

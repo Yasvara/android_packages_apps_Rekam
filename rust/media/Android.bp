@@ -1,0 +1,41 @@
+// Rekam container layer. std only, so it builds and tests on host.
+rust_defaults {
+    name: "librekam_media_defaults",
+    crate_name: "rekam_media",
+    edition: "2021",
+    lints: "android",
+    clippy_lints: "android",
+    host_supported: true,
+}
+
+rust_library {
+    name: "librekam_media",
+    defaults: ["librekam_media_defaults"],
+    srcs: ["src/lib.rs"],
+}
+
+rust_test_host {
+    name: "rekam_media_unit_tests",
+    defaults: ["librekam_media_defaults"],
+    srcs: ["src/lib.rs"],
+    test_suites: ["general-tests"],
+}
+
+rust_test_host {
+    name: "rekam_media_recovery_tests",
+    crate_name: "rekam_media_recovery_tests",
+    edition: "2021",
+    srcs: ["tests/recovery.rs"],
+    rustlibs: ["librekam_media"],
+    test_suites: ["general-tests"],
+}
+
+rust_test_host {
+    name: "rekam_media_real_codecs_tests",
+    crate_name: "rekam_media_real_codecs_tests",
+    edition: "2021",
+    srcs: ["tests/real_codecs.rs"],
+    rustlibs: ["librekam_media"],
+    data: ["tests/data/*"],
+    test_suites: ["general-tests"],
+}
